@@ -119,7 +119,6 @@ mod auth {
 
     #[async_trait]
     impl Authenticator<User> for JsonFileAuthenticator {
-        #[tracing_attributes::instrument]
         async fn authenticate(&self, username: &str, creds: &libunftp::auth::Credentials) -> Result<User, AuthenticationError> {
             let res = if let Some(actual_creds) = self.credentials_map.get(username) {
                 let pass_check_result = match &creds.password {
@@ -161,7 +160,6 @@ mod auth {
 
     #[async_trait]
     impl Authenticator<DefaultUser> for JsonFileAuthenticator {
-        #[tracing_attributes::instrument]
         async fn authenticate(&self, username: &str, creds: &libunftp::auth::Credentials) -> Result<DefaultUser, AuthenticationError> {
             let _: User = self.authenticate(username, creds).await?;
             Ok(DefaultUser {})

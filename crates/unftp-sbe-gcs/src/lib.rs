@@ -132,7 +132,7 @@ impl<User: UserDetail> StorageBackend<User> for CloudStorage {
         libunftp::storage::FEATURE_SITEMD5
     }
 
-    #[tracing_attributes::instrument]
+    
     async fn metadata<P>(&self, _user: &User, path: P) -> Result<Self::Metadata, Error>
     where
         P: AsRef<Path> + Send + Debug,
@@ -147,7 +147,6 @@ impl<User: UserDetail> StorageBackend<User> for CloudStorage {
         self.gcs.item(path).await?.to_md5()
     }
 
-    #[tracing_attributes::instrument]
     async fn list<P>(&self, _user: &User, path: P) -> Result<Vec<Fileinfo<PathBuf, Self::Metadata>>, Error>
     where
         P: AsRef<Path> + Send + Debug,
@@ -193,7 +192,6 @@ impl<User: UserDetail> StorageBackend<User> for CloudStorage {
         Ok(item.to_metadata()?.len())
     }
 
-    #[tracing_attributes::instrument]
     async fn del<P>(&self, _user: &User, path: P) -> Result<(), Error>
     where
         P: AsRef<Path> + Send + Debug,
@@ -201,18 +199,15 @@ impl<User: UserDetail> StorageBackend<User> for CloudStorage {
         self.gcs.delete(path).await
     }
 
-    #[tracing_attributes::instrument]
     async fn mkd<P: AsRef<Path> + Send + Debug>(&self, _user: &User, path: P) -> Result<(), Error> {
         self.gcs.mkd(path).await
     }
 
-    #[tracing_attributes::instrument]
     async fn rename<P: AsRef<Path> + Send + Debug>(&self, _user: &User, _from: P, _to: P) -> Result<(), Error> {
         // TODO: implement this
         Err(Error::from(ErrorKind::CommandNotImplemented))
     }
 
-    #[tracing_attributes::instrument]
     async fn rmd<P: AsRef<Path> + Send + Debug>(&self, _user: &User, path: P) -> Result<(), Error> {
         // first call is only to figure out if the directory is actually empty or not
         let path: PathBuf = path.as_ref().into();
@@ -229,7 +224,6 @@ impl<User: UserDetail> StorageBackend<User> for CloudStorage {
         self.gcs.rmd(path).await
     }
 
-    #[tracing_attributes::instrument]
     async fn cwd<P>(&self, _user: &User, path: P) -> Result<(), Error>
     where
         P: AsRef<Path> + Send + Debug,

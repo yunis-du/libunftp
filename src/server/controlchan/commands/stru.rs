@@ -57,7 +57,6 @@ where
     Storage: StorageBackend<User> + 'static,
     Storage::Metadata: Metadata,
 {
-    #[tracing_attributes::instrument]
     async fn handle(&self, _args: CommandContext<Storage, User>) -> Result<Reply, ControlChanError> {
         match &self.params {
             StruParam::File => Ok(Reply::new(ReplyCode::CommandOkay, "In File structure mode")),

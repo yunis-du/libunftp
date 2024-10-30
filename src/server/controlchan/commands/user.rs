@@ -33,7 +33,6 @@ where
     Storage: StorageBackend<Usr> + 'static,
     Storage::Metadata: Metadata,
 {
-    #[tracing_attributes::instrument]
     async fn handle(&self, args: CommandContext<Storage, Usr>) -> Result<Reply, ControlChanError> {
         let mut session = args.session.lock().await;
         let username_str = std::str::from_utf8(&self.username)?;

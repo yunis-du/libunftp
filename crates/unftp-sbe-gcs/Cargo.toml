@@ -35,7 +35,6 @@ tokio = { version = "1.38.0", features = ["rt", "net", "sync", "io-util", "time"
 tokio-stream = "0.1.15"
 tokio-util = { version = "0.7.11", features = ["codec", "compat"] }
 tracing = { version = "0.1.40", default-features = false }
-tracing-attributes = "0.1.27"
 yup-oauth2 = "8.3.2"
 
 [dev-dependencies]
@@ -52,4 +51,3 @@ slog-stdlog = "4.1.1"
 slog-term = "2.9.1"
 tempfile = "3.10.1"
 tokio = { version = "1.38.0", features = ["macros", "rt-multi-thread"] }
-tracing-subscriber = "0.3.18"

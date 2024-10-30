@@ -29,7 +29,6 @@ path_abs = "0.5.1"
 tokio = { version = "1.38.0", features = ["rt", "net", "sync", "io-util", "time", "fs"] }
 tokio-stream = "0.1.15"
 tracing = { version = "0.1.40", default-features = false }
-tracing-attributes = "0.1.27"
 
 [dev-dependencies]
 async_ftp = "6.0.0"
@@ -47,7 +46,6 @@ slog-async = "2.8.0"
 slog-term = "2.9.1"
 tempfile = "3.10.1"
 tokio = { version = "1.38.0", features = ["macros", "rt-multi-thread"] }
-tracing-subscriber = "0.3.18"
 getrandom = "0.2.15"
 
 [target.'cfg(target_os = "freebsd")'.dev-dependencies]

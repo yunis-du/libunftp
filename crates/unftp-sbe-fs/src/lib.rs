@@ -107,7 +107,6 @@ impl<User: UserDetail> StorageBackend<User> for Filesystem {
         libunftp::storage::FEATURE_RESTART | libunftp::storage::FEATURE_SITEMD5
     }
 
-    #[tracing_attributes::instrument]
     async fn metadata<P: AsRef<Path> + Send + Debug>(&self, _user: &User, path: P) -> Result<Self::Metadata> {
         let path = strip_prefixes(path.as_ref());
         let fs_meta = cap_fs::symlink_metadata(self.root_fd.clone(), &path)
@@ -129,7 +128,6 @@ impl<User: UserDetail> StorageBackend<User> for Filesystem {
     }
 
     #[allow(clippy::type_complexity)]
-    #[tracing_attributes::instrument]
     async fn list<P>(&self, _user: &User, path: P) -> Result<Vec<Fileinfo<std::path::PathBuf, Self::Metadata>>>
     where
         P: AsRef<Path> + Send + Debug,
@@ -164,7 +162,6 @@ impl<User: UserDetail> StorageBackend<User> for Filesystem {
         Ok(fis)
     }
 
-    //#[tracing_attributes::instrument]
     async fn get<P: AsRef<Path> + Send + Debug>(&self, _user: &User, path: P, start_pos: u64) -> Result<Box<dyn tokio::io::AsyncRead + Send + Sync + Unpin>> {
         let path = strip_prefixes(path.as_ref());
         let file = cap_fs::open(self.root_fd.clone(), path).await?;
@@ -200,7 +197,6 @@ impl<User: UserDetail> StorageBackend<User> for Filesystem {
         Ok(bytes_copied)
     }
 
-    #[tracing_attributes::instrument]
     async fn del<P: AsRef<Path> + Send + Debug>(&self, _user: &User, path: P) -> Result<()> {
         let path = strip_prefixes(path.as_ref());
         cap_fs::remove_file(self.root_fd.clone(), path)
@@ -208,7 +204,6 @@ impl<User: UserDetail> StorageBackend<User> for Filesystem {
             .map_err(|error: std::io::Error| error.into())
     }
 
-    #[tracing_attributes::instrument]
     async fn rmd<P: AsRef<Path> + Send + Debug>(&self, _user: &User, path: P) -> Result<()> {
         let path = strip_prefixes(path.as_ref());
         cap_fs::remove_dir(self.root_fd.clone(), path)
@@ -216,7 +211,6 @@ impl<User: UserDetail> StorageBackend<User> for Filesystem {
             .map_err(|error: std::io::Error| error.into())
     }
 
-    #[tracing_attributes::instrument]
     async fn mkd<P: AsRef<Path> + Send + Debug>(&self, _user: &User, path: P) -> Result<()> {
         let path = strip_prefixes(path.as_ref());
         cap_fs::create_dir(self.root_fd.clone(), path)
@@ -224,7 +218,6 @@ impl<User: UserDetail> StorageBackend<User> for Filesystem {
             .map_err(|error: std::io::Error| error.into())
     }
 
-    #[tracing_attributes::instrument]
     async fn rename<P: AsRef<Path> + Send + Debug>(&self, _user: &User, from: P, to: P) -> Result<()> {
         let from = from.as_ref().strip_prefix("/").unwrap_or(from.as_ref());
         let to = to.as_ref().strip_prefix("/").unwrap_or(to.as_ref());
@@ -246,7 +239,6 @@ impl<User: UserDetail> StorageBackend<User> for Filesystem {
         }
     }
 
-    #[tracing_attributes::instrument]
     async fn cwd<P: AsRef<Path> + Send + Debug>(&self, user: &User, path: P) -> Result<()> {
         self.list(user, path).await.map(drop)
     }

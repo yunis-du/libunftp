@@ -126,7 +126,6 @@ where
         session.data_busy = false;
     }
 
-    #[tracing_attributes::instrument]
     async fn handle_incoming(self, incoming: DataChanMsg, start_pos: u64) {
         match incoming {
             DataChanMsg::Abort => {
@@ -140,7 +139,6 @@ where
         }
     }
 
-    #[tracing_attributes::instrument]
     async fn execute_command(self, cmd: DataChanCmd, start_pos: u64) {
         match cmd {
             DataChanCmd::Retr { path } => {
@@ -158,7 +156,6 @@ where
         }
     }
 
-    #[tracing_attributes::instrument]
     async fn exec_retr(self, path: String, start_pos: u64) {
         let path_copy = path.clone();
         let path = self.cwd.join(path);
@@ -251,7 +248,6 @@ where
         }
     }
 
-    #[tracing_attributes::instrument]
     async fn exec_stor(self, path: String, start_pos: u64) {
         let path_copy = path.clone();
         let path = self.cwd.join(path);
@@ -305,7 +301,6 @@ where
         }
     }
 
-    #[tracing_attributes::instrument]
     async fn exec_list_variant(self, path: Option<String>, command: ListCommand) {
         let path = self.resolve_path(path);
         let tx = self.control_msg_tx.clone();
@@ -393,7 +388,6 @@ where
         }
     }
 
-    #[tracing_attributes::instrument]
     async fn writer(socket: TcpStream, ftps_mode: FtpsConfig, command: &'static str) -> Box<dyn AsyncWrite + Send + Unpin + Sync> {
         match ftps_mode {
             FtpsConfig::Off => Box::new(MeasuringWriter::new(socket, command)) as Box<dyn AsyncWrite + Send + Unpin + Sync>,
@@ -410,7 +404,6 @@ where
         }
     }
 
-    #[tracing_attributes::instrument]
     async fn reader(socket: TcpStream, ftps_mode: FtpsConfig, command: &'static str) -> Box<dyn AsyncRead + Send + Unpin + Sync> {
         match ftps_mode {
             FtpsConfig::Off => Box::new(MeasuringReader::new(socket, command)) as Box<dyn AsyncRead + Send + Unpin + Sync>,
@@ -448,7 +441,6 @@ where
 /// logger: logger set up with needed context for use by the data channel.
 /// session_arc: the user session that is also shared with the control channel.
 /// socket: the data socket we'll be working with.
-#[tracing_attributes::instrument]
 pub async fn spawn_processing<Storage, User>(logger: slog::Logger, session_arc: SharedSession<Storage, User>, mut socket: TcpStream)
 where
     Storage: StorageBackend<User> + 'static,

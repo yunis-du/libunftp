@@ -1,6 +1,5 @@
 use clap::{Arg, Command};
 use std::{error::Error, path::PathBuf};
-use tracing::Level;
 
 // To run this example with the local fake GCS (see tests/resources/gcs_test.sh) instead of Google GCS,
 // after starting fake-gcs-server, run this example with
@@ -17,7 +16,6 @@ const FAKE_GCS_BASE_URL: &str = "fake-gcs-base-url";
 
 #[tokio::main]
 pub async fn main() -> Result<(), Box<dyn Error>> {
-    tracing_subscriber::fmt().with_max_level(Level::TRACE).init();
 
     let matches = Command::new("Example for using libunftp with Google Cloud Storage backend with optionally enabling TLS")
         .about("An FTP server that uses Google Cloud Storage as a backend")

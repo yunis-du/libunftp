@@ -49,7 +49,6 @@ impl Port {
 
     // modifies the session by adding channels that are used to communicate with the data connection
     // processing loop.
-    #[tracing_attributes::instrument]
     async fn setup_inter_loop_comms<S, U>(&self, session: SharedSession<S, U>, control_loop_tx: Sender<ControlChanMsg>)
     where
         U: UserDetail + 'static,
@@ -69,7 +68,6 @@ impl Port {
 
     // For non-proxy mode we choose a data port here and start listening on it while letting the control
     // channel know (via method return) what the address is that the client should connect to.
-    #[tracing_attributes::instrument]
     async fn handle_nonproxy_mode<S, U>(&self, args: CommandContext<S, U>) -> Result<Reply, ControlChanError>
     where
         U: UserDetail + 'static,
@@ -101,8 +99,7 @@ impl Port {
         Ok(Reply::new(ReplyCode::CommandOkay, "Entering Active mode"))
     }
 
-    #[tracing_attributes::instrument]
-    async fn handle_proxy_mode<S, U>(&self, args: CommandContext<S, U>, tx: ProxyLoopSender<S, U>) -> Result<Reply, ControlChanError>
+    async fn handle_proxy_mode<S, U>(&self, _args: CommandContext<S, U>, _tx: ProxyLoopSender<S, U>) -> Result<Reply, ControlChanError>
     where
         U: UserDetail + 'static,
         S: StorageBackend<U> + 'static,
@@ -122,7 +119,6 @@ where
     Storage: StorageBackend<User> + 'static,
     Storage::Metadata: Metadata,
 {
-    #[tracing_attributes::instrument]
     async fn handle(&self, args: CommandContext<Storage, User>) -> Result<Reply, ControlChanError> {
         let sender: Option<ProxyLoopSender<Storage, User>> = args.tx_proxyloop.clone();
         match sender {

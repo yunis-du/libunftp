@@ -348,7 +348,6 @@ impl JsonFileAuthenticator {
 
 #[async_trait]
 impl Authenticator<DefaultUser> for JsonFileAuthenticator {
-    #[tracing_attributes::instrument]
     async fn authenticate(&self, username: &str, creds: &libunftp::auth::Credentials) -> Result<DefaultUser, AuthenticationError> {
         let res = if let Some(actual_creds) = self.credentials_map.get(username) {
             let client_cert = &actual_creds.client_cert;

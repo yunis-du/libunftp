@@ -25,7 +25,6 @@ where
     Storager: StorageBackend<User> + 'static,
     Storager::Metadata: Metadata,
 {
-    #[tracing_attributes::instrument]
     async fn handle(&self, args: CommandContext<Storager, User>) -> Result<Reply, ControlChanError> {
         let mut session = args.session.lock().await;
         let uuid: String = Uuid::new_v4().to_string();

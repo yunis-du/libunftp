@@ -63,7 +63,6 @@ pub(crate) struct ProxyConnection {
 /// If the header size is invalid, or the header does not end with a CR-LF sequence, the function returns a `ProxyError`
 /// with the reason for the failure. If there is a problem reading from the TCP stream, the function returns a `ProxyError::ReadError`.
 /// If the header cannot be parsed, the function returns a `ProxyError::DecodeError`.
-#[tracing_attributes::instrument]
 pub(self) async fn read_proxy_header(tcp_stream: &mut tokio::net::TcpStream) -> Result<ProxyHeader, ProxyError> {
     // Create two vectors to hold the data read from the TCP stream
     let mut pbuf = vec![0; 108]; // peek buffer
@@ -113,7 +112,6 @@ pub(self) async fn read_proxy_header(tcp_stream: &mut tokio::net::TcpStream) -> 
 
 /// Takes a tcp stream and reads the proxy protocol header
 /// Sends the extracted proxy connection information (source ip+port, destination ip+port) to the proxy loop
-#[tracing_attributes::instrument]
 pub(super) fn spawn_proxy_header_parsing<Storage, User>(logger: slog::Logger, mut tcp_stream: tokio::net::TcpStream, tx: ProxyLoopSender<Storage, User>)
 where
     User: UserDetail + 'static,
@@ -232,7 +230,6 @@ where
         }
     }
 
-    #[tracing_attributes::instrument]
     pub async fn get_session_by_incoming_data_connection(&mut self, connection: &ProxyConnection) -> Option<SharedSession<S, U>> {
         let hash: ProxyHashKey = connection.into();
 
@@ -245,7 +242,6 @@ where
     /// Find the next available port within the specified range (inclusive of the upper limit).
     /// The reserved port is associated with the source ip of the client and the associated session, using a hashmap
     ///
-    //#[tracing_attributes::instrument]
     pub async fn reserve_next_free_port(&mut self, session_arc: SharedSession<S, U>) -> Result<u16, ProxyProtocolError> {
         let range_size = self.port_range.end - self.port_range.start;
 

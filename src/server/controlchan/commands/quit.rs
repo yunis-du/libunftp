@@ -37,7 +37,6 @@ where
     Storage: StorageBackend<User> + 'static,
     Storage::Metadata: Metadata,
 {
-    #[tracing_attributes::instrument]
     async fn handle(&self, args: CommandContext<Storage, User>) -> Result<Reply, ControlChanError> {
         let tx: Sender<ControlChanMsg> = args.tx_control_chan.clone();
         let logger = args.logger;

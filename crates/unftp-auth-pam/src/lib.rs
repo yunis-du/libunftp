@@ -28,7 +28,6 @@ impl PamAuthenticator {
 #[async_trait]
 impl Authenticator<DefaultUser> for PamAuthenticator {
     #[allow(clippy::type_complexity)]
-    #[tracing_attributes::instrument]
     async fn authenticate(&self, username: &str, creds: &Credentials) -> Result<DefaultUser, AuthenticationError> {
         let username = username.to_string();
         let password = creds.password.as_ref().ok_or(AuthenticationError::BadPassword)?;

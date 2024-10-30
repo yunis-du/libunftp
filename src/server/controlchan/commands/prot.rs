@@ -42,7 +42,6 @@ where
     Storage: StorageBackend<User> + 'static,
     Storage::Metadata: 'static + Metadata,
 {
-    #[tracing_attributes::instrument]
     async fn handle(&self, args: CommandContext<Storage, User>) -> Result<Reply, ControlChanError> {
         match (args.tls_configured, self.param.clone()) {
             (true, ProtParam::Clear) => {

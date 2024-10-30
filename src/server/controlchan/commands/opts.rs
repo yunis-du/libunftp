@@ -44,7 +44,6 @@ where
     Storage: StorageBackend<User> + 'static,
     Storage::Metadata: Metadata,
 {
-    #[tracing_attributes::instrument]
     async fn handle(&self, _args: CommandContext<Storage, User>) -> Result<Reply, ControlChanError> {
         match &self.option {
             Opt::Utf8 { on: true } => Ok(Reply::new(ReplyCode::CommandOkay, "Always in UTF-8 mode.")),

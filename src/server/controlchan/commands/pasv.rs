@@ -41,7 +41,6 @@ impl Pasv {
         Pasv {}
     }
 
-    #[tracing_attributes::instrument]
     fn try_port_range(local_addr: IpAddr, passive_ports: Range<u16>) -> io::Result<TcpSocket> {
         let rng_length = passive_ports.end - passive_ports.start + 1;
 
@@ -67,7 +66,6 @@ impl Pasv {
 
     // modifies the session by adding channels that are used to communicate with the data connection
     // processing loop.
-    #[tracing_attributes::instrument]
     async fn setup_inter_loop_comms<S, U>(&self, session: SharedSession<S, U>, control_loop_tx: Sender<ControlChanMsg>)
     where
         U: UserDetail + 'static,
@@ -87,7 +85,6 @@ impl Pasv {
 
     // For non-proxy mode we choose a data port here and start listening on it while letting the control
     // channel know (via method return) what the address is that the client should connect to.
-    #[tracing_attributes::instrument]
     async fn handle_nonproxy_mode<S, U>(&self, args: CommandContext<S, U>) -> Result<Reply, ControlChanError>
     where
         U: UserDetail + 'static,
@@ -149,7 +146,6 @@ impl Pasv {
 
     // For proxy mode we prepare the session and let the proxy loop know (via channel) that it
     // should choose a data port and check for connections on it.
-    #[tracing_attributes::instrument]
     async fn handle_proxy_mode<S, U>(&self, args: CommandContext<S, U>, tx: ProxyLoopSender<S, U>) -> Result<Reply, ControlChanError>
     where
         U: UserDetail + 'static,
@@ -169,7 +165,6 @@ where
     Storage: StorageBackend<User> + 'static,
     Storage::Metadata: Metadata,
 {
-    #[tracing_attributes::instrument]
     async fn handle(&self, args: CommandContext<Storage, User>) -> Result<Reply, ControlChanError> {
         let sender: Option<ProxyLoopSender<Storage, User>> = args.tx_proxyloop.clone();
         match sender {

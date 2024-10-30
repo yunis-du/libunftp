@@ -221,7 +221,6 @@ impl TrimQuotes for String {
 
 #[async_trait]
 impl Authenticator<DefaultUser> for RestAuthenticator {
-    #[tracing_attributes::instrument]
     async fn authenticate(&self, username: &str, creds: &Credentials) -> Result<DefaultUser, AuthenticationError> {
         let username_url = utf8_percent_encode(username, NON_ALPHANUMERIC).collect::<String>();
         let password = creds.password.as_ref().ok_or(AuthenticationError::BadPassword)?.as_ref();

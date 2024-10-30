@@ -18,7 +18,6 @@ where
     Storage: StorageBackend<User> + 'static,
     Storage::Metadata: Metadata,
 {
-    #[tracing_attributes::instrument]
     async fn handle(&self, _args: CommandContext<Storage, User>) -> Result<Reply, ControlChanError> {
         // let mut tx: Sender<InternalMsg> = args.tx.clone();
         // let session = args.session.lock().await;

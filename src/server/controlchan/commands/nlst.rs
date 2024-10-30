@@ -36,7 +36,6 @@ where
     Storage: StorageBackend<User> + 'static,
     Storage::Metadata: Metadata,
 {
-    #[tracing_attributes::instrument]
     async fn handle(&self, args: CommandContext<Storage, User>) -> Result<Reply, ControlChanError> {
         let mut session = args.session.lock().await;
         let (cmd, path_opt): (DataChanCmd, Option<String>) = match args.parsed_command.clone() {
